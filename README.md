@@ -10,12 +10,12 @@ Mở `index.html` rồi chọn **Chơi thử một thiết bị** để dùng b�
 
 ## Bật multiplayer qua Supabase
 
-Multiplayer dùng Supabase Auth (anonymous), Postgres và Realtime. Tất cả thiết bị phải mở cùng một URL ứng dụng đã host và trỏ tới cùng một Supabase project.
+Multiplayer dùng Supabase Auth (email/password), Postgres và Realtime. Tất cả thiết bị phải mở cùng một URL ứng dụng đã host và trỏ tới cùng một Supabase project.
 
-1. Tạo Supabase project và bật **Email** trong phần Auth. Game đăng nhập bằng link email; Anonymous Sign-Ins vẫn tắt.
+1. Bật **Email** trong Auth. Với tài khoản thử nghiệm Player1–Player12, game ánh xạ tên sang địa chỉ nội bộ `playerN@iwolf.test` và dùng mật khẩu Supabase. Không gửi thư đăng nhập.
 2. Chạy toàn bộ `supabase/schema.sql` trong SQL Editor (có thể chạy lại để thêm cấu hình mới).
 3. Sao chép Project URL và publishable key (tiền tố `sb_publishable_`) vào `supabase/config.js`. Không đặt service role/secret key trong trình duyệt.
-4. Thêm URL callback của ứng dụng vào Auth → URL Configuration (localhost trong dev và domain HTTPS khi triển khai), rồi host ứng dụng tại HTTPS. Mỗi thiết bị nhập email, mở link xác thực trên cùng thiết bị, rồi tạo/vào phòng. `file://` không hỗ trợ đăng nhập multiplayer. `localhost` chỉ dành cho dev trên cùng máy.
+4. Để tạo các tài khoản thử nghiệm không cần email, tắt **Confirm email** trong Auth → Sign In / Providers → Email trước. Mỗi người chọn `Player1` đến `Player12`, nhấn **TẠO TÀI KHOẢN PLAYER** một lần và nhập mật khẩu; sau đó đăng nhập bằng cùng thông tin. Tắt xác nhận email cho phép người dùng đăng ký địa chỉ giả, nên chỉ dùng trong môi trường thử nghiệm và bật lại trước khi triển khai công khai. `file://` không hỗ trợ đăng nhập multiplayer; `localhost` chỉ dùng để phát triển trên cùng máy.
 5. Host chọn số người và mức Speaking tối thiểu từ 3.0 đến 8.0; người khác nhập mã phòng. Vai riêng chỉ được trả về cho tài khoản người chơi tương ứng.
 
 Schema khóa quyền đọc trực tiếp bảng vai trò, dùng RPC có kiểm tra thành viên/quản trò, và cho phép realtime chỉ trên bảng phòng/danh sách người chơi công khai.
@@ -33,7 +33,7 @@ Schema khóa quyền đọc trực tiếp bảng vai trò, dùng RPC có kiểm 
 
 Mỗi tài khoản chỉ được gọi API của nhóm mà ghế của họ thuộc về, chỉ gửi trong pha đêm và chỉ thay câu trả lời của chính mình. Cả bốn API lưu câu trả lời, đếm từ và trả về snapshot phòng chứa `speaking_report` dùng chung. Báo cáo công khai tên, nhóm API, trạng thái gửi, số từ và điểm; không trả nguyên văn câu trả lời. Test Game Function tự báo 7.0 cho cả phòng mà không cần gửi đáp án.
 
-Điểm thật để trống (`null`) cho đến khi có dịch vụ AI hoặc người chấm đáng tin cậy; các API này hiện nhận/lưu/đếm câu trả lời và tổng hợp tiến độ, chưa chấm IELTS. Đăng nhập bằng email magic link; Anonymous Sign-Ins được giữ tắt. Chạy `supabase/schema.sql` trong SQL Editor để cài bảng cùng RPC.
+Điểm thật để trống (`null`) cho đến khi có dịch vụ AI hoặc người chấm đáng tin cậy; các API này hiện nhận/lưu/đếm câu trả lời và tổng hợp tiến độ, chưa chấm IELTS. Chạy `supabase/schema.sql` trong SQL Editor để cài bảng cùng RPC.
 
 ## Test Game Function
 

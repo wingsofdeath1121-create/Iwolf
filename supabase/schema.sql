@@ -1,5 +1,5 @@
 -- Iwolf multiplayer foundation for Supabase
--- Run once in the Supabase SQL Editor. The game uses email sign-in; anonymous sign-ins stay disabled.
+-- Run once in the Supabase SQL Editor. The game uses email/password sign-in; anonymous sign-ins are not used.
 create extension if not exists pgcrypto with schema extensions;
 
 create table if not exists public.iwolf_rooms (
