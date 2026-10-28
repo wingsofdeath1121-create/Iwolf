@@ -58,6 +58,6 @@ function finishVote(){clearInterval(tick);let tally={};alive().forEach(p=>{let v
 function nextNight(){G.day++;G.phase='night';G.votes={};G.actions={};G.nightDead=[];G.question=questions[Math.floor(Math.random()*questions.length)];resetSpeaking();startTimer('action',resolveNight)}
 function checkWinner(){let wolf=alive().filter(p=>roles[actionPlayer(p)].team==='wolf'||p.converted).length;let village=alive().length-wolf;if(!wolf){G.winner='village';G.phase='gameover';G.seconds=undefined;render();return true}if(wolf>=village){G.winner='wolf';G.phase='gameover';G.seconds=undefined;render();return true}return false}
 showSetup();
-</script><script src="online.js?v=5"></script></body></html>
+</script><script src="online.js?v=6"></script></body></html>
 
 

@@ -12,10 +12,10 @@ Mở `index.html` rồi chọn **Chơi thử một thiết bị** để dùng b�
 
 Multiplayer dùng Supabase Auth (email/password), Postgres và Realtime. Tất cả thiết bị phải mở cùng một URL ứng dụng đã host và trỏ tới cùng một Supabase project.
 
-1. Bật **Email** trong Auth. Với tài khoản thử nghiệm Player1–Player12, game ánh xạ tên sang địa chỉ nội bộ `playerN@iwolf.test` và dùng mật khẩu Supabase. Không gửi thư đăng nhập.
+1. Ứng dụng đã cấu hình chung bằng `supabase/config.js`, dùng cùng một Project URL và publishable key trên mọi thiết bị. Chỉ cần host cùng một bản ứng dụng; từng người không phải cấu hình riêng. File này chỉ dùng publishable key, không đặt service role/secret key vào client.
 2. Chạy toàn bộ `supabase/schema.sql` trong SQL Editor (có thể chạy lại để thêm cấu hình mới).
-3. Sao chép Project URL và publishable key (tiền tố `sb_publishable_`) vào `supabase/config.js`. Không đặt service role/secret key trong trình duyệt.
-4. Để tạo các tài khoản thử nghiệm không cần email, tắt **Confirm email** trong Auth → Sign In / Providers → Email trước. Mỗi người chọn `Player1` đến `Player12`, nhấn **TẠO TÀI KHOẢN PLAYER** một lần và nhập mật khẩu; sau đó đăng nhập bằng cùng thông tin. Tắt xác nhận email cho phép người dùng đăng ký địa chỉ giả, nên chỉ dùng trong môi trường thử nghiệm và bật lại trước khi triển khai công khai. `file://` không hỗ trợ đăng nhập multiplayer; `localhost` chỉ dùng để phát triển trên cùng máy.
+3. Bật **Email** trong Auth. Tài khoản Player1–Player12 ánh xạ sang email nội bộ `playerN@iwolf.test`, không gửi thư đăng nhập. Mỗi người vẫn đăng nhập bằng tài khoản Player riêng để Supabase xác định đúng người chơi và áp dụng quyền truy cập.
+4. Để tạo tài khoản thử nghiệm không cần email, tắt **Confirm email** trong Auth → Sign In / Providers → Email. Mỗi người chọn `Player1` đến `Player12`, nhấn **TẠO TÀI KHOẢN PLAYER** một lần và nhập mật khẩu; sau đó đăng nhập bằng cùng thông tin. Tắt xác nhận email cho phép đăng ký địa chỉ giả, nên chỉ dùng khi thử nghiệm và bật lại trước khi phát hành công khai. `file://` không hỗ trợ đăng nhập multiplayer; `localhost` chỉ dùng để phát triển trên cùng máy.
 5. Host chọn số người và mức Speaking tối thiểu từ 3.0 đến 8.0; người khác nhập mã phòng. Vai riêng chỉ được trả về cho tài khoản người chơi tương ứng.
 
 Schema khóa quyền đọc trực tiếp bảng vai trò, dùng RPC có kiểm tra thành viên/quản trò, và cho phép realtime chỉ trên bảng phòng/danh sách người chơi công khai.

@@ -23,6 +23,18 @@
     document.getElementById('localGame').onclick=()=>{window.IWOLF_TEST_MODE=testMode;window.IWOLF_MIN_SPEAKING_SCORE=+document.getElementById('speakingMinScore').value;oldSetup()};
     document.getElementById('simulateSix').onclick=()=>{simulateSixAfterPassword=true;if(testMode){startSixPlayerDemo();return}document.getElementById('testModeToggle').click()};
     document.getElementById('guideBtn').onclick=showGuide;
+    if(hasDb){
+      try{
+        clientReady();
+        const status=document.getElementById('hubError');
+        status.classList.remove('hidden');
+        status.textContent='Supabase Iwolf đã được cấu hình dùng chung. Đăng nhập Player riêng để tạo hoặc tham gia phòng.';
+      }catch(e){
+        const status=document.getElementById('hubError');
+        status.classList.remove('hidden');
+        status.textContent=msg(e);
+      }
+    }
   }
   function toggleTestMode(e){if(testMode){testMode=false;testPassword='';window.IWOLF_TEST_MODE=false;return}const toggle=e.currentTarget;toggle.checked=false;document.body.insertAdjacentHTML('beforeend',`<div class="overlay" id="testPasswordOverlay"><section class="panel modal"><h2>Mở Test Game Function</h2><p class="muted">Nhập mật mã để bật chế độ bỏ qua Speaking cho phòng do bạn tạo hoặc mô phỏng.</p><label class="field">Mật mã<input class="input" id="testPasswordInput" type="password" autocomplete="off"></label><p id="testPasswordError" class="error hidden">Mật mã chưa đúng.</p><div class="row"><button id="confirmTestMode" class="btn gold">BẬT TÍNH NĂNG</button><button id="cancelTestMode" class="btn secondary">HỦY</button></div></section></div>`);const close=()=>document.getElementById('testPasswordOverlay')?.remove();document.getElementById('cancelTestMode').onclick=()=>{toggle.checked=false;simulateSixAfterPassword=false;close()};document.getElementById('confirmTestMode').onclick=()=>{const input=document.getElementById('testPasswordInput');if(input.value!=='pandass1102'){document.getElementById('testPasswordError').classList.remove('hidden');input.focus();return}testPassword=input.value;testMode=true;toggle.checked=true;window.IWOLF_TEST_MODE=true;window.IWOLF_MIN_SPEAKING_SCORE=+document.getElementById('speakingMinScore').value;close();if(simulateSixAfterPassword){simulateSixAfterPassword=false;startSixPlayerDemo()}};document.getElementById('testPasswordInput').focus()}
   function startSixPlayerDemo(){const letters=['A','B','C','D','E','F'],roles=['seer','witch','wolf','angel','villager','villager'];const demo={phase:'night',day:1,testMode:true,question:'Describe a skill you would like to learn.',players:letters.map((letter,i)=>({id:letter,name:`Player ${letter}`,role:roles[i],alive:true,score:7,action:null})),messages:[],updatedAt:Date.now()};localStorage.setItem('iwolf-six-screen-demo',JSON.stringify(demo));let opened=0;for(const letter of letters){const tab=window.open(`simulator.html?player=${letter}&rev=4`,`iwolf-player-${letter}`);if(tab)opened++}const status=document.getElementById('hubError');status.classList.remove('hidden');status.textContent=opened===6?'Đã mở sáu tab Player A–F. Tương tác và chat trong các tab được đồng bộ cục bộ.':`Trình duyệt chỉ mở được ${opened}/6 tab tự động. Cho phép cửa sổ bật lên rồi nhấn lại nút này.`}
